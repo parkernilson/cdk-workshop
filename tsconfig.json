@@ -6,7 +6,8 @@
       "es2020",
       "dom"
     ],
-    "declaration": true,
+    "outDir": "dist",
+    "declaration": false,
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -26,6 +27,7 @@
   },
   "exclude": [
     "node_modules",
-    "cdk.out"
+    "cdk.out",
+    "cdk"
   ]
 }
