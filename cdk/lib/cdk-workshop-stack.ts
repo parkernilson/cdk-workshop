@@ -50,9 +50,18 @@ export class CdkWorkshopStack extends Stack {
           statements: [
             new iam.PolicyStatement({
               effect: iam.Effect.ALLOW,
-              actions: ["s3:getObject"],
+              actions: [
+                "s3:getObject"
+              ],
               resources: [webappDeploymentBucket.bucketArn + "/*"],
             }),
+            new iam.PolicyStatement({
+              effect: iam.Effect.ALLOW,
+              actions: [
+                "s3:ListBucket"
+              ],
+              resources: [webappDeploymentBucket.bucketArn],
+            })
           ],
         })
       }
