@@ -69,7 +69,7 @@ export class CdkWorkshopStack extends Stack {
       roleName: "CodeDeployRoleForGithub",
       assumedBy: new iam.OpenIdConnectPrincipal(oidcProvider, {
         "StringLike": {
-          "token.actions.githubusercontent.com:sub": `repo:${GITHUB_REPO_NAME}`
+          "token.actions.githubusercontent.com:sub": `repo:${GITHUB_REPO_NAME}:*`
         }
       }),
       maxSessionDuration: Duration.hours(12),
@@ -91,9 +91,18 @@ export class CdkWorkshopStack extends Stack {
     githubIamRole.addToPolicy(new iam.PolicyStatement({
       effect: iam.Effect.ALLOW,
       actions: [
-        "s3:putObject",
+        "s3:GetObject",
+        "s3:PutObject",
       ],
       resources: [webappDeploymentBucket.bucketArn + "/*"],
+    })) 
+
+    githubIamRole.addToPolicy(new iam.PolicyStatement({
+      effect: iam.Effect.ALLOW,
+      actions: [
+        "s3:ListBucket",
+      ],
+      resources: [webappDeploymentBucket.bucketArn],
     }))
 
     const webappApplication = new codedeploy.ServerApplication(this, "webappApplication", {
