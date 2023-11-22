@@ -24,6 +24,7 @@ export class CdkWorkshopStack extends Stack {
 
     const ec2Instance = new ec2.Instance(this, "myEc2", {
       vpc: vpc,
+      keyName: "parker-dev-keypair",
       instanceType: ec2.InstanceType.of(
         ec2.InstanceClass.T2,
         ec2.InstanceSize.MICRO
