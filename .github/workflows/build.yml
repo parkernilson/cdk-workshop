@@ -35,7 +35,7 @@ jobs:
 
       - name: Build and Package Application
         id: package
-        working-directory: ${{ env.applicationfolder }}
+        working-directory: ./
         run: $GITHUB_WORKSPACE/.github/scripts/build.sh
 
       - name: Upload Artifact to s3
