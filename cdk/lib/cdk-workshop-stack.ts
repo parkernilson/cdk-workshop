@@ -94,7 +94,7 @@ export class CdkWorkshopStack extends Stack {
         "codedeploy:RegisterApplicationRevision",
         "codedeploy:List*"
       ],
-      resources: [webappDeploymentBucket.bucketArn + "/*"],
+      resources: [`arn:${Aws.PARTITION}:codedeploy:*:${Aws.ACCOUNT_ID}:*`]
     }))
 
     githubIamRole.addToPolicy(new iam.PolicyStatement({
