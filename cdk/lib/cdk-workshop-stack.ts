@@ -125,6 +125,8 @@ export class CdkWorkshopStack extends Stack {
       securityGroupName: "webappSecurityGroup",
     })
     webappSecurityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(80), "allow http access from anywhere")
+    webappSecurityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(443), "allow https access from anywhere")
+    webappSecurityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(22), "allow https access from anywhere")
 
     const codeDeployRole = new iam.Role(this, "codeDeployRole", {
       assumedBy: new iam.ServicePrincipal("codedeploy.amazonaws.com"),
