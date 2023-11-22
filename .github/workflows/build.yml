@@ -39,5 +39,5 @@ jobs:
 
       - name: Upload Artifact to s3
         run: |
-          aws s3 cp dist/index.js s3://${{ env.S3BUCKET }}/dist/index.js
+          aws s3 sync dist/ s3://${{ env.S3BUCKET }}/dist/
 
