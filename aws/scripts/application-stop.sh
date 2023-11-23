@@ -6,4 +6,4 @@ set -x
 # if [ "$tomcat_running" == "active" ]; then
 #     service tomcat stop
 # fi
-pm2 stop cdk-workshop-app
+/usr/bin/pm2 stop cdk-workshop-app
