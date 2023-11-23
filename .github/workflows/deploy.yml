@@ -42,6 +42,7 @@ jobs:
           aws s3 sync dist/ s3://${{ env.S3BUCKET }}/dist/
                   
   deploy:
+    name: Deploy to AWS
     needs: build
     runs-on: ubuntu-latest
     environment: Dev

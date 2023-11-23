@@ -22,10 +22,6 @@ export class CdkWorkshopStack extends Stack {
       ],
     });
 
-
-    // TODO: create a custom image with PM2, Caddy, and node.js pre installed
-    // TODO: create a storage volume for the image (so that Pocketbase can store its data)
-
     const webappDeploymentBucket = new s3.Bucket(this, "myBucket", {
       bucketName: "cdk-workshop-webapp-deployment-bucket",
       encryption: s3.BucketEncryption.S3_MANAGED,
