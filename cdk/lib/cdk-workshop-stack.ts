@@ -29,9 +29,14 @@ export class CdkWorkshopStack extends Stack {
         ec2.InstanceClass.T2,
         ec2.InstanceSize.MICRO
       ),
-      machineImage: new ec2.AmazonLinuxImage(),
+      machineImage: new ec2.AmazonLinuxImage({
+        generation: ec2.AmazonLinuxGeneration.AMAZON_LINUX_2023,
+      }),
     });
     Tags.of(ec2Instance).add("codedeploy-project", "cdk-workshop")
+
+    // TODO: create a custom image with PM2, Caddy, and node.js pre installed
+    // TODO: create a storage volume for the image (so that Pocketbase can store its data)
 
     const webappDeploymentBucket = new s3.Bucket(this, "myBucket", {
       bucketName: "cdk-workshop-webapp-deployment-bucket",
