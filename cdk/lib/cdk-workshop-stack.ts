@@ -22,19 +22,6 @@ export class CdkWorkshopStack extends Stack {
       ],
     });
 
-    const ec2Instance = new ec2.Instance(this, "myEc2", {
-      vpc: vpc,
-      keyName: "parker-dev-keypair",
-      instanceType: ec2.InstanceType.of(
-        ec2.InstanceClass.T2,
-        ec2.InstanceSize.MICRO
-      ),
-      // machineImage: ec2.MachineImage.latestAmazonLinux2023()
-      machineImage: ec2.MachineImage.lookup({
-        name: "AmazonLinux2023-Node-PM2-Caddy",
-      })
-    });
-    Tags.of(ec2Instance).add("codedeploy-project", "cdk-workshop")
 
     // TODO: create a custom image with PM2, Caddy, and node.js pre installed
     // TODO: create a storage volume for the image (so that Pocketbase can store its data)
@@ -48,7 +35,10 @@ export class CdkWorkshopStack extends Stack {
     const webappRole = new iam.Role(this, "WebappRole", {
       path: "/",
       roleName: "WebappRole",
-      assumedBy: new iam.ServicePrincipal("ec2.amazonaws.com"),
+      assumedBy: new iam.CompositePrincipal(
+        new iam.ServicePrincipal("ec2.amazonaws.com"),
+        new iam.ServicePrincipal("codedeploy.amazonaws.com")
+      ),
       managedPolicies: [
         iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonSSMManagedInstanceCore"),
       ],
@@ -73,7 +63,21 @@ export class CdkWorkshopStack extends Stack {
         })
       }
     })
-    webappRole.grantAssumeRole(new iam.ServicePrincipal("codedeploy.amazonaws.com"))
+
+    const ec2Instance = new ec2.Instance(this, "myEc2", {
+      vpc: vpc,
+      keyName: "parker-dev-keypair",
+      instanceType: ec2.InstanceType.of(
+        ec2.InstanceClass.T2,
+        ec2.InstanceSize.MICRO
+      ),
+      // machineImage: ec2.MachineImage.latestAmazonLinux2023()
+      machineImage: ec2.MachineImage.lookup({
+        name: "AmazonLinux2023-Node-PM2-Caddy",
+      }),
+      role: webappRole
+    });
+    Tags.of(ec2Instance).add("codedeploy-project", "cdk-workshop")
 
     const oidcProvider = new iam.OpenIdConnectProvider(this, "githubOidcProvider", {
       url: "https://token.actions.githubusercontent.com",
