@@ -29,9 +29,7 @@ export class CdkWorkshopStack extends Stack {
         ec2.InstanceClass.T2,
         ec2.InstanceSize.MICRO
       ),
-      machineImage: new ec2.AmazonLinuxImage({
-        generation: ec2.AmazonLinuxGeneration.AMAZON_LINUX_2023,
-      }),
+      machineImage: ec2.MachineImage.latestAmazonLinux2023()
     });
     Tags.of(ec2Instance).add("codedeploy-project", "cdk-workshop")
 
